@@ -3,3 +3,6 @@ node_modules/
 
 # Exclude environment files
 .env
+
+#Exclude frontend folder
+frontend/
