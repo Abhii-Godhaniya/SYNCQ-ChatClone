@@ -1,9 +1,10 @@
 import express from "express";
-import {signup,login,logout,checkAuthenticate} from "../controllers/auth.controller.js";
+import {signup,login,logout,checkAuthenticate,deleteAccount} from "../controllers/auth.controller.js";
 const router = express.Router();
 import passport from "../lib/passport.js";
 import { protectRoute } from "../middleware/auth.protectroute.js";
 import { updateProfile } from "../controllers/auth.controller.js";
+
 router.post("/signup",signup);
 
 router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
@@ -33,5 +34,6 @@ router.post("/logout",logout);
 router.put("/updateProfile",protectRoute,updateProfile);
 
 router.get("/check",protectRoute,checkAuthenticate)
+router.delete("/delete",protectRoute,deleteAccount);
 
 export default router;

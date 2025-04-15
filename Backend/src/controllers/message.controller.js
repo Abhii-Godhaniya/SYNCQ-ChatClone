@@ -11,7 +11,7 @@ export const  getUsers = async(req,res)=>{
             res.status(500).json({message:"Internal server error"});
         }
 }
-
+//read operation
 export const getMessage = async (req,res)=>{
     try{
         const { id:userToChatId}  = req.params;
@@ -29,7 +29,7 @@ export const getMessage = async (req,res)=>{
         res.status(500).json({Error:"Internal server error"});
     }
 }
-
+//create message
 export const sendMessage = async (req,res)=>{
     try{
         const { text,image ,vedio ,emoji } = req.body;
@@ -59,4 +59,50 @@ export const sendMessage = async (req,res)=>{
         console.log("Error sending message",err.message);
         res.status(500).json({message:"Internal server error" });
     }
+}
+//update message
+export const updateMessage = async(req,res)=>{
+    try{
+        const{id:messageId} = req.params;
+        const { text, emoji} = req.body;
+        const userId = req.user._id;
+        const message = await message.findById(messageId);
+
+        if(!message){
+            return res.status(404).json({message: "Message not found"});
+        }
+        if(message.sender.toString()!== userId.toString()){
+            return res.status(403).json({message: "Unathourized to update the message"});
+        }
+        if(text) message.text = text;
+        if(emoji) message.emoji = emoji;
+        message.edited = true;
+
+        const updateMessage = await message.save();
+        res.status(200).json(updateMessage);
+    }catch(err){
+        console.log("Error in updating message",message.err);
+        res.status(500).json({message:"Internal server error" });
+    }
+}
+//delete message
+export const deleteMessage = async(req,res)=>{
+    try{
+        const{id:messageId} = req.params;
+        const userId = req.user._id;
+        const message = await message.findById(messageId);
+
+        if(!message){
+            return res.status(404).json({message: "Message not found"});
+        }
+        if(message.sender.toString()!== userId.toString()){
+            return res.status(403).json({message: "Unathourized to update the message"});
+        }
+        const deleteMessage = await message.deleteOne();
+        res.status(200).json({message: "Deleted successfully"});
+    }catch(err){
+        console.log("Error in deleting message",message.err);
+        res.status(500).json({message:"Internal server error" });
+    }
+
 }

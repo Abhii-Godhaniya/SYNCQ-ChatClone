@@ -4,7 +4,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
 import User from "../models/user.model.js"; 
 import '../config.js';
-// import dotenv from "dotenv";
+import dotenv from "dotenv";
 // const result = dotenv.config({ path: './.env' }); 
 // console.log("dotenv result:", result);
 // console.log("Google Client ID:", process.env.GOOGLE_CLIENT_ID);
